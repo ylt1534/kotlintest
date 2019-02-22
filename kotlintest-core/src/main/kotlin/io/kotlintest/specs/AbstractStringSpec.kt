@@ -41,4 +41,29 @@ abstract class AbstractStringSpec(body: AbstractStringSpec.() -> Unit = {}) : Ab
 
   operator fun String.invoke(test: suspend TestContext.() -> Unit) =
       addTestCase(this, test, defaultTestCaseConfig, TestType.Test)
+
+  protected fun from(factory: TestFactory) {
+    factory.tests.forEach {
+      addTestCase(it.name, { it.test() }, defaultTestCaseConfig, TestType.Test)
+    }
+  }
+}
+
+class TestFactory {
+
+  data class DynamicTest(val name: String, val test: () -> Unit)
+
+  internal val tests = mutableListOf<DynamicTest>()
+
+  fun test(name: String, f: () -> Unit) {
+    tests.add(DynamicTest(name, f))
+  }
+
+  companion object {
+    inline operator fun invoke(register: TestFactory.() -> Unit): TestFactory {
+      val factory = TestFactory()
+      factory.register()
+      return factory
+    }
+  }
 }

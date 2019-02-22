@@ -38,4 +38,10 @@ abstract class AbstractFunSpec(body: AbstractFunSpec.() -> Unit = {}) : Abstract
 
   fun test(name: String, test: suspend TestContext.() -> Unit) =
       addTestCase(name, test, defaultTestCaseConfig, TestType.Test)
+
+  protected fun from(factory: TestFactory) {
+    factory.tests.forEach {
+      addTestCase(it.name, { it.test() }, defaultTestCaseConfig, TestType.Test)
+    }
+  }
 }
