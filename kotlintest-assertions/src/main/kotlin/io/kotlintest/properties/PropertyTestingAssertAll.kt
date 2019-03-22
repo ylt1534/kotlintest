@@ -5,10 +5,10 @@ package io.kotlintest.properties
 import outputClassifications
 import testAndShrink
 
-inline fun <reified A> assertAll(fn: PropertyContext.(a: A) -> Unit) = assertAll(1000, fn)
-inline fun <reified A> assertAll(iterations: Int, fn: PropertyContext.(a: A) -> Unit) = assertAll(iterations, Gen.default(), fn)
-inline fun <A> assertAll(genA: Gen<A>, fn: PropertyContext.(a: A) -> Unit) = assertAll(1000, genA, fn)
-inline fun <A> assertAll(iterations: Int, genA: Gen<A>, fn: PropertyContext.(a: A) -> Unit) {
+@JvmName("assertAll1") inline fun <reified A> assertAll(noinline fn: suspend PropertyContext.(a: A) -> Unit) = assertAll(1000, fn)
+@JvmName("assertAll1") inline fun <reified A> assertAll(iterations: Int, noinline fn: suspend PropertyContext.(a: A) -> Unit) = assertAll(iterations, Gen.default(), fn)
+fun <A> assertAll(genA: Gen<A>, fn: suspend PropertyContext.(a: A) -> Unit) = assertAll(1000, genA, fn)
+fun <A> assertAll(iterations: Int, genA: Gen<A>, fn: suspend PropertyContext.(a: A) -> Unit) {
   checkIterations(iterations)
   
   val (context, contextValues) = createContextValues(genA, iterations)
@@ -27,11 +27,11 @@ internal fun <A> createContextValues(genA: Gen<A>, iterations: Int): ContextValu
   return ContextValues(context, contextValues)
 }
 
-inline fun <reified A, reified B> assertAll(fn: PropertyContext.(a: A, b: B) -> Unit) = assertAll(1000, fn)
-inline fun <reified A, reified B> assertAll(iterations: Int, fn: PropertyContext.(a: A, b: B) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), fn)
-inline fun <A, B> assertAll(gena: Gen<A>, genb: Gen<B>, fn: PropertyContext.(a: A, b: B) -> Unit) = assertAll(1000, gena, genb, fn)
+@JvmName("assertAll2") inline fun <reified A, reified B> assertAll(noinline fn: suspend PropertyContext.(a: A, b: B) -> Unit) = assertAll(1000, fn)
+@JvmName("assertAll2") inline fun <reified A, reified B> assertAll(iterations: Int, noinline fn: suspend PropertyContext.(a: A, b: B) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), fn)
+fun <A, B> assertAll(gena: Gen<A>, genb: Gen<B>, fn: suspend PropertyContext.(a: A, b: B) -> Unit) = assertAll(1000, gena, genb, fn)
 
-inline fun <A, B> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, fn: PropertyContext.(a: A, b: B) -> Unit) {
+fun <A, B> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, fn: suspend PropertyContext.(a: A, b: B) -> Unit) {
   checkIterations(iterations)
   
   val (context, contextValues) = createContextValues(genA, genB, iterations)
@@ -57,11 +57,11 @@ internal fun <A, B> Gen<A>.pairWith(genB: Gen<B>): Sequence<Pair<A, B>> {
 }
 
 
-inline fun <reified A, reified B, reified C> assertAll(fn: PropertyContext.(a: A, b: B, c: C) -> Unit) = assertAll(1000, fn)
-inline fun <reified A, reified B, reified C> assertAll(iterations: Int, fn: PropertyContext.(a: A, b: B, c: C) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), fn)
-inline fun <A, B, C> assertAll(gena: Gen<A>, genb: Gen<B>, genc: Gen<C>, fn: PropertyContext.(a: A, b: B, c: C) -> Unit) = assertAll(1000, gena, genb, genc, fn)
+@JvmName("assertAll3") inline fun <reified A, reified B, reified C> assertAll(noinline fn: suspend PropertyContext.(a: A, b: B, c: C) -> Unit) = assertAll(1000, fn)
+inline fun <reified A, reified B, reified C> assertAll(iterations: Int, noinline fn: suspend PropertyContext.(a: A, b: B, c: C) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), fn)
+@JvmName("assertAll3") fun <A, B, C> assertAll(gena: Gen<A>, genb: Gen<B>, genc: Gen<C>, fn: suspend PropertyContext.(a: A, b: B, c: C) -> Unit) = assertAll(1000, gena, genb, genc, fn)
 
-inline fun <A, B, C> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, fn: PropertyContext.(a: A, b: B, c: C) -> Unit) {
+fun <A, B, C> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, fn: suspend PropertyContext.(a: A, b: B, c: C) -> Unit) {
   checkIterations(iterations)
   val (context, contextValues) = createContextValues(genA, genB, genC, iterations)
   
@@ -109,11 +109,11 @@ private fun <A, B, C> randomsCartesianProduct(genA: Gen<A>, genB: Gen<B>, genC: 
   }
 }
 
-inline fun <reified A, reified B, reified C, reified D> assertAll(fn: PropertyContext.(a: A, b: B, c: C, D) -> Unit) = assertAll(1000, fn)
-inline fun <reified A, reified B, reified C, reified D> assertAll(iterations: Int, fn: PropertyContext.(a: A, b: B, c: C, D) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
-inline fun <A, B, C, D> assertAll(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, fn: PropertyContext.(a: A, b: B, c: C, d: D) -> Unit) = assertAll(1000, genA, genB, genC, genD, fn)
+@JvmName("assertAll4") inline fun <reified A, reified B, reified C, reified D> assertAll(noinline fn: suspend PropertyContext.(a: A, b: B, c: C, D) -> Unit) = assertAll(1000, fn)
+@JvmName("assertAll4") inline fun <reified A, reified B, reified C, reified D> assertAll(iterations: Int, noinline fn: suspend PropertyContext.(a: A, b: B, c: C, D) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
+fun <A, B, C, D> assertAll(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, fn: suspend PropertyContext.(a: A, b: B, c: C, d: D) -> Unit) = assertAll(1000, genA, genB, genC, genD, fn)
 
-inline fun <A, B, C, D> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, fn: PropertyContext.(a: A, b: B, c: C, d: D) -> Unit) {
+fun <A, B, C, D> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, fn: suspend PropertyContext.(a: A, b: B, c: C, d: D) -> Unit) {
   checkIterations(iterations)
   val (context, contextValues) = createContextValues(genA, genB, genC, genD, iterations)
   
@@ -164,11 +164,11 @@ private fun <A, B, C, D> randomsCartesianProduct(genA: Gen<A>, genB: Gen<B>, gen
   }
 }
 
-inline fun <reified A, reified B, reified C, reified D, reified E> assertAll(fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) = assertAll(Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
-inline fun <reified A, reified B, reified C, reified D, reified E> assertAll(iterations: Int, fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
-inline fun <A, B, C, D, E> assertAll(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) = assertAll(1000, genA, genB, genC, genD, genE, fn)
+@JvmName("assertAll5") inline fun <reified A, reified B, reified C, reified D, reified E> assertAll(noinline fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) = assertAll(Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
+@JvmName("assertAll5") inline fun <reified A, reified B, reified C, reified D, reified E> assertAll(iterations: Int, noinline fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
+fun <A, B, C, D, E> assertAll(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) = assertAll(1000, genA, genB, genC, genD, genE, fn)
 
-inline fun <A, B, C, D, E> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) {
+fun <A, B, C, D, E> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E) -> Unit) {
   checkIterations(iterations)
   val (context, contextValues) = createContextValues(genA, genB, genC, genD, genE, iterations)
   
@@ -225,11 +225,11 @@ private fun <A, B, C, D, E> randomsCartesianProduct(genA: Gen<A>, genB: Gen<B>, 
   }
 }
 
-inline fun <reified A, reified B, reified C, reified D, reified E, reified F> assertAll(fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) =  assertAll(1000, fn)
-inline fun <reified A, reified B, reified C, reified D, reified E, reified F> assertAll(iterations: Int, fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
-inline fun <A, B, C, D, E, F> assertAll(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, genF: Gen<F>, fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) = assertAll(1000, genA, genB, genC, genD, genE, genF, fn)
+@JvmName("assertAll6") inline fun <reified A, reified B, reified C, reified D, reified E, reified F> assertAll(noinline fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) =  assertAll(1000, fn)
+@JvmName("assertAll6") inline fun <reified A, reified B, reified C, reified D, reified E, reified F> assertAll(iterations: Int, noinline fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) = assertAll(iterations, Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), Gen.default(), fn)
+fun <A, B, C, D, E, F> assertAll(genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, genF: Gen<F>, fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) = assertAll(1000, genA, genB, genC, genD, genE, genF, fn)
 
-inline fun <A, B, C, D, E, F> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, genF: Gen<F>, fn: PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) {
+fun <A, B, C, D, E, F> assertAll(iterations: Int, genA: Gen<A>, genB: Gen<B>, genC: Gen<C>, genD: Gen<D>, genE: Gen<E>, genF: Gen<F>, fn: suspend PropertyContext.(a: A, b: B, c: C, d: D, e: E, f: F) -> Unit) {
   checkIterations(iterations)
   
   val (context, contextValues) = createContextValues(genA, genB, genC, genD, genE, genF, iterations)
@@ -319,11 +319,11 @@ data class Tuple6<out A, out B, out C, out D, out E, out F>(val a: A, val b: B, 
   }
 }
 
-inline fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: PropertyContext.(a: A) -> Unit) = assertAll(iterations, this, fn)
-inline fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: PropertyContext.(a0: A, a1: A) -> Unit) = assertAll(iterations, this, this, fn)
-inline fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: PropertyContext.(a0: A, a1: A, a2: A) -> Unit) = assertAll(iterations, this, this, this, fn)
-inline fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: PropertyContext.(a0: A, a1: A, a2: A, a3: A) -> Unit) = assertAll(iterations, this, this, this, this, fn)
-inline fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: PropertyContext.(a0: A, a1: A, a2: A, a3: A, a4: A) -> Unit) = assertAll(iterations, this, this, this, this, this, fn)
-inline fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: PropertyContext.(a0: A, a1: A, a2: A, a3: A, a4: A, a5: A) -> Unit) = assertAll(iterations, this, this, this, this, this, this, fn)
+@JvmName("assertAll1") fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: suspend PropertyContext.(a: A) -> Unit) = assertAll(iterations, this, fn)
+fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: suspend PropertyContext.(a0: A, a1: A) -> Unit) = assertAll(iterations, this, this, fn)
+fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: suspend PropertyContext.(a0: A, a1: A, a2: A) -> Unit) = assertAll(iterations, this, this, this, fn)
+fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: suspend PropertyContext.(a0: A, a1: A, a2: A, a3: A) -> Unit) = assertAll(iterations, this, this, this, this, fn)
+fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: suspend PropertyContext.(a0: A, a1: A, a2: A, a3: A, a4: A) -> Unit) = assertAll(iterations, this, this, this, this, this, fn)
+fun <A> Gen<A>.assertAll(iterations: Int = 1000, fn: suspend PropertyContext.(a0: A, a1: A, a2: A, a3: A, a4: A, a5: A) -> Unit) = assertAll(iterations, this, this, this, this, this, this, fn)
 
 data class ContextValues<T>(val context: PropertyContext, val values: Sequence<T>)

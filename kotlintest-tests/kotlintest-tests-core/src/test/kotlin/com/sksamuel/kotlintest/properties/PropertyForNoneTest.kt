@@ -576,36 +576,36 @@ class PropertyForNoneTest : FreeSpec() {
       }
       attempts shouldBe 30000
     }
-    
-//    "Accept suspended" {
-//      suspend fun foo() { }
-//
-//      forNone { _: Int ->
-//        foo()
-//        false
-//      }
-//
-//      forNone { _: Int ->
-//        foo()
-//        false
-//      }
-//
-//      forNone { _: Int ->
-//        foo()
-//        false
-//      }
-//    }
-//
-//    "Accept nested context" - {
-//      suspend fun foo() { }
-//
-//      forNone { a: Int ->
-//        "Foo $a" {
-//          foo()
-//        }
-//        false
-//      }
-//    }
+
+    "Accept suspended" {
+      suspend fun foo() { }
+
+      forNone { _: Int ->
+        foo()
+        false
+      }
+
+      forNone { _: Int ->
+        foo()
+        false
+      }
+
+      forNone { _: Int ->
+        foo()
+        false
+      }
+    }
+
+    "Accept nested context" - {
+      suspend fun foo() { }
+
+      forNone(10) { a: Int ->
+        "Foo $a" {
+          foo()
+        }
+        false
+      }
+    }
 
   }
 }

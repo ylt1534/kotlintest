@@ -13,6 +13,7 @@ repositories {
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-reflect"
     compile 'com.univocity:univocity-parsers:2.8.1'
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     compile group: 'com.github.wumpz', name: 'diffutils', version: '2.2'
 }
 

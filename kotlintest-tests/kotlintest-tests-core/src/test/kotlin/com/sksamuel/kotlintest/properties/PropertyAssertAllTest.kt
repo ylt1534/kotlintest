@@ -495,6 +495,17 @@ class PropertyAssertAllTest : FreeSpec({
     
   }
   
+  "accept nested context" - {
+    suspend fun foo() {}
+    
+    assertAll(10) { a: Int ->
+      "Foo $a" {
+        foo()
+      }
+      
+    }
+  }
+  
 })
 
 
