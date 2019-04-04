@@ -1,0 +1,51 @@
+buildscript {
+    ext.kotlin_version = '1.3.21'
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath group: 'io.kotlintest', name: 'kotlintest-gradle-plugin', version: '1.0.2-LOCAL'
+
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.multiplatform' version '1.3.21'
+}
+
+apply plugin: "io.kotlintest"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+kotlin {
+
+    js()
+
+    sourceSets {
+        jsMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+            }
+        }
+        jsTest {
+            dependencies {
+            }
+        }
+    }
+}
+
+kotlin.sourceSets.all {
+    languageSettings {
+        languageVersion = '1.3' // possible values: '1.0', '1.1', '1.2', '1.3'
+        apiVersion = '1.3' // possible values: '1.0', '1.1', '1.2', '1.3'
+        enableLanguageFeature('InlineClasses') // language feature name
+    }
+}
