@@ -1,8 +1,28 @@
-plugins {
-    id 'java'
-    id 'java-library'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }
 
-apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
 
-publish.enabled = false
+kotlin {
+
+    js()
+
+    sourceSets {
+        jsMain {
+            dependencies {
+                api "org.jetbrains.kotlin:kotlin-stdlib-js"
+                api project(':kotlintest-core')
+                api project(':kotlintest-assertions')
+            }
+        }
+    }
+}
+
+
+apply from: '../publish.gradle'

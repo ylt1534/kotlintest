@@ -1,0 +1,35 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath group: 'io.kotlintest', name: 'kotlintest-gradle-plugin', version: '1.0.2-LOCAL'
+    }
+}
+
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
+apply plugin: "io.kotlintest"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+kotlin {
+
+    js()
+
+    sourceSets {
+        jsMain {
+            dependencies {
+                implementation kotlin('stdlib-js')
+                api project(':kotlintest-runner')
+            }
+        }
+    }
+}
