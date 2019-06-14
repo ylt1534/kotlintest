@@ -21,6 +21,11 @@ class EitherMatchersTest : WordSpec() {
         Either.right("boo").shouldBeRight()
         Either.left("boo").shouldNotBeRight()
       }
+      "use contracts to smart cast" {
+        val e = Either.right("boo")
+        e.shouldBeRight()
+        e.b shouldBe "boo"
+      }
     }
 
     "Either should beRight(value)" should {
@@ -46,6 +51,11 @@ class EitherMatchersTest : WordSpec() {
       "test that the either is of type left" {
         Either.left("boo").shouldBeLeft()
         Either.right("boo").shouldNotBeLeft()
+      }
+      "use contracts to smart cast" {
+        val e = Either.left("boo")
+        e.shouldBeLeft()
+        e.a shouldBe "boo"
       }
     }
 
